@@ -1,0 +1,3 @@
+package cr.ac.ucr.mediacloud.config;
+import cr.ac.ucr.mediacloud.model.Usuario;import jakarta.servlet.http.*;import org.springframework.stereotype.Component;import org.springframework.web.servlet.HandlerInterceptor;
+@Component public class AuthInterceptor implements HandlerInterceptor{ public boolean preHandle(HttpServletRequest req,HttpServletResponse res,Object handler)throws Exception{String uri=req.getRequestURI(); if(uri.startsWith("/css")||uri.startsWith("/login")||uri.equals("/")||uri.startsWith("/error"))return true; Usuario u=(Usuario)req.getSession().getAttribute("usuario"); if(u==null){res.sendRedirect("/login"); return false;} if(uri.startsWith("/usuarios") && !u.esAdmin()){res.sendRedirect("/dashboard?error=permiso"); return false;} return true;}}

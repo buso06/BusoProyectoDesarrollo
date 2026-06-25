@@ -1,0 +1,10 @@
+<nav class="sidebar" th:fragment="sidebar">
+  <div class="brand">MediaCloud</div>
+  <a href="/dashboard">Inicio</a>
+  <a href="/albumes">Álbumes</a>
+  <a href="/archivos">Archivos</a>
+  <a href="/categorias">Categorías</a>
+  <a href="/reportes">Reportes</a>
+  <a href="/usuarios" th:if="${session.usuario != null and session.usuario.esAdmin()}">Usuarios</a>
+  <form method="post" action="/logout"><button type="submit">Cerrar sesión</button></form>
+</nav>

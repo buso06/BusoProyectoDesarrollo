@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Álbumes</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <h1>Álbumes</h1>
+            <a class="btn" href="/albumes/nuevo">Nuevo álbum</a>
+        </div>
+
+        <section class="card">
+
+            <h2>Mis álbumes</h2>
+
+            <div th:if="${albumes == null or #lists.isEmpty(albumes)}">
+                <p>No hay álbumes registrados todavía.</p>
+                <a class="btn" href="/albumes/nuevo">Crear primer álbum</a>
+            </div>
+
+            <table th:if="${albumes != null and !#lists.isEmpty(albumes)}">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Público</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="a : ${albumes}">
+                    <td th:text="${a.id}">1</td>
+
+                    <td th:text="${a.nombre}">Playa</td>
+
+                    <td th:text="${a.descripcion}">Fotos y videos de playa</td>
+
+                    <td>
+                        <span class="badge"
+                              th:text="${a.publico ? 'Sí' : 'No'}">
+                            Sí
+                        </span>
+                    </td>
+
+                    <td th:text="${a.fechaCreacion}">2026-06-23</td>
+
+                    <td class="actions">
+
+                        <a class="btn"
+                           th:href="@{/albumes/ver/{id}(id=${a.id})}">
+                            Abrir
+                        </a>
+
+                        <a class="btn gray"
+                           th:href="@{/albumes/editar/{id}(id=${a.id})}">
+                            Editar
+                        </a>
+
+                        <form method="post"
+                              th:action="@{/albumes/eliminar/{id}(id=${a.id})}"
+                              style="display:inline;">
+                            <button class="btn danger"
+                                    type="submit"
+                                    onclick="return confirm('¿Seguro que deseas eliminar este álbum? También se eliminarán los archivos asociados.');">
+                                Eliminar
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

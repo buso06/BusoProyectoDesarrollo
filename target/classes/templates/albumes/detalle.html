@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Detalle de álbum</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1 th:text="${album.nombre}">Nombre del álbum</h1>
+                <p th:text="${album.descripcion}">Descripción del álbum</p>
+            </div>
+
+            <a class="btn gray" href="/albumes">Volver</a>
+        </div>
+
+        <section class="card">
+
+            <h2>Archivos dentro del álbum</h2>
+
+            <div th:if="${archivos == null or #lists.isEmpty(archivos)}">
+                <p>Este álbum todavía no tiene archivos guardados.</p>
+                <a class="btn" href="/archivos/nuevo">Subir archivo</a>
+            </div>
+
+            <table th:if="${archivos != null and !#lists.isEmpty(archivos)}">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Tamaño</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="a : ${archivos}">
+                    <td th:text="${a.id}">1</td>
+
+                    <td th:text="${a.nombreOriginal}">archivo.jpg</td>
+
+                    <td th:text="${a.tipoMime}">image/jpeg</td>
+
+                    <td th:text="${a.tamanioBytes + ' bytes'}">1000 bytes</td>
+
+                    <td>
+                        <span class="badge" th:text="${a.estado}">ACTIVO</span>
+                    </td>
+
+                    <td th:text="${a.fechaCarga}">2026-06-23</td>
+
+                    <td class="actions">
+
+                        <a class="btn"
+                           th:href="@{/archivos/ver/{id}(id=${a.id})}"
+                           target="_blank">
+                            Abrir
+                        </a>
+
+                        <a class="btn gray"
+                           th:href="@{/archivos/descargar/{id}(id=${a.id})}">
+                            Descargar
+                        </a>
+
+                        <a class="btn gray"
+                           th:href="@{/archivos/editar/{id}(id=${a.id})}">
+                            Editar
+                        </a>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
