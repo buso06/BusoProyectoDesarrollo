@@ -1,3 +1,43 @@
 package cr.ac.ucr.mediacloud.config;
-import cr.ac.ucr.mediacloud.model.Usuario;import jakarta.servlet.http.*;import org.springframework.stereotype.Component;import org.springframework.web.servlet.HandlerInterceptor;
-@Component public class AuthInterceptor implements HandlerInterceptor{ public boolean preHandle(HttpServletRequest req,HttpServletResponse res,Object handler)throws Exception{String uri=req.getRequestURI(); if(uri.startsWith("/css")||uri.startsWith("/login")||uri.equals("/")||uri.startsWith("/error"))return true; Usuario u=(Usuario)req.getSession().getAttribute("usuario"); if(u==null){res.sendRedirect("/login"); return false;} if(uri.startsWith("/usuarios") && !u.esAdmin()){res.sendRedirect("/dashboard?error=permiso"); return false;} return true;}}
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@Component
+public class AuthInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
+
+        String uri = request.getRequestURI();
+
+        // Rutas públicas
+        if (uri.equals("/")
+                || uri.equals("/login")
+                || uri.equals("/registro")
+                || uri.equals("/error")
+                || uri.equals("/favicon.ico")
+                || uri.startsWith("/css/")
+                || uri.startsWith("/js/")
+                || uri.startsWith("/images/")
+                || uri.startsWith("/img/")
+                || uri.startsWith("/webjars/")) {
+            return true;
+        }
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null && session.getAttribute("usuario") != null) {
+            return true;
+        }
+
+        response.sendRedirect("/login");
+        return false;
+    }
+}

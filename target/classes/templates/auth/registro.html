@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Registro</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="login">
+
+<section class="card">
+
+    <h1>Crear cuenta</h1>
+    <p>Registre un nuevo usuario para acceder a MediaCloud.</p>
+
+    <p class="error" th:if="${error}" th:text="${error}">
+        Error
+    </p>
+
+    <form method="post" action="/registro">
+
+        <div class="field">
+            <label>Nombre completo</label>
+            <input type="text"
+                   name="nombre"
+                   placeholder="Nombre del usuario"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Correo</label>
+            <input type="email"
+                   name="correo"
+                   placeholder="usuario@correo.com"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Contraseña</label>
+            <input type="password"
+                   name="clave"
+                   placeholder="Contraseña"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Confirmar contraseña</label>
+            <input type="password"
+                   name="confirmarClave"
+                   placeholder="Repita la contraseña"
+                   required>
+        </div>
+
+        <button class="btn" type="submit">Crear cuenta</button>
+
+        <a class="btn gray" th:href="@{/login}" style="margin-left:8px;">
+            Volver
+        </a>
+
+    </form>
+
+</section>
+
+</body>
+</html>
