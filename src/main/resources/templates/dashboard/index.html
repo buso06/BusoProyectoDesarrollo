@@ -1,1 +1,64 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>MediaCloud | Dashboard</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><div class="top"><div><h1 th:text="'Hola, ' + ${session.usuario.nombre}">Hola</h1><p>Panel principal del sistema de gestión multimedia local.</p></div></div><section class="grid"><article class="card stat"><h2 th:text="${totalArchivos}">0</h2><p>Archivos activos</p></article><article class="card stat"><h2 th:text="${totalAlbumes}">0</h2><p>Álbumes</p></article><article class="card stat"><h2 th:text="${totalCategorias}">0</h2><p>Categorías</p></article><article class="card stat"><h2 th:text="${totalUsuarios}">0</h2><p>Usuarios</p></article></section><section class="card" style="margin-top:18px"><h2>Accesos rápidos</h2><a class="btn" href="/archivos/nuevo">Subir archivo</a> <a class="btn gray" href="/albumes/nuevo">Crear álbum</a> <a class="btn gray" href="/reportes">Ver reportes</a></section></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Inicio</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1 th:text="'Hola, ' + ${session.usuario.nombre}">Hola</h1>
+                <p>Panel principal del sistema de gestión multimedia local.</p>
+            </div>
+        </div>
+
+        <!-- Accesos rápidos movidos arriba -->
+        <section class="card">
+            <h2>Accesos rápidos</h2>
+
+            <div class="actions">
+                <a class="btn" href="/archivos/nuevo">Subir archivo</a>
+                <a class="btn gray" href="/albumes/nuevo">Crear álbum</a>
+                <a class="btn gray" href="/reportes">Ver reportes</a>
+            </div>
+        </section>
+
+        <!-- Estadísticas abajo -->
+        <section class="stats">
+
+            <article class="stat-card">
+                <h3>Archivos activos</h3>
+                <strong th:text="${totalArchivos}">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <h3>Álbumes</h3>
+                <strong th:text="${totalAlbumes}">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <h3>Categorías</h3>
+                <strong th:text="${totalCategorias}">0</strong>
+            </article>
+
+            <article class="stat-card">
+                <h3>Usuarios</h3>
+                <strong th:text="${totalUsuarios}">0</strong>
+            </article>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

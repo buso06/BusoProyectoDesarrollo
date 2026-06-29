@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Álbum privado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1>Álbum privado</h1>
+                <p th:text="${album.nombre}">Nombre del álbum</p>
+            </div>
+
+            <a class="btn gray" href="/albumes">Volver</a>
+        </div>
+
+        <section class="card">
+
+            <h2>Ingrese la contraseña</h2>
+
+            <p>
+                Este álbum es privado. Para ver sus archivos debe ingresar la contraseña configurada.
+            </p>
+
+            <p class="error" th:if="${error}" th:text="${error}">
+                Error
+            </p>
+
+            <form method="post"
+                  th:action="@{/albumes/validar-clave/{id}(id=${album.id})}">
+
+                <div class="field">
+                    <label>Contraseña</label>
+                    <input type="password"
+                           name="claveTexto"
+                           placeholder="Contraseña del álbum"
+                           required>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Abrir álbum</button>
+                    <a class="btn gray" href="/albumes">Cancelar</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

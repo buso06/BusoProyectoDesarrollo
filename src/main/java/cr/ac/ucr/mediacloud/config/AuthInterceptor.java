@@ -3,6 +3,7 @@ package cr.ac.ucr.mediacloud.config;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import cr.ac.ucr.mediacloud.model.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,8 +18,32 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String uri = request.getRequestURI();
 
-        // Rutas públicas
-        if (uri.equals("/")
+        // Rutas públicas: se pueden abrir sin iniciar sesión
+        if (esRutaPublica(uri)) {
+            return true;
+        }
+
+        HttpSession session = request.getSession(false);
+
+        // Si no hay sesión o no hay usuario logueado, vuelve al login
+        if (session == null || session.getAttribute("usuario") == null) {
+            response.sendRedirect("/login");
+            return false;
+        }
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+        // Rutas solo para administrador
+        if (esRutaAdmin(uri) && !esAdministrador(usuario)) {
+            response.sendRedirect("/dashboard");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean esRutaPublica(String uri) {
+        return uri.equals("/")
                 || uri.equals("/login")
                 || uri.equals("/registro")
                 || uri.equals("/error")
@@ -27,17 +52,17 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || uri.startsWith("/js/")
                 || uri.startsWith("/images/")
                 || uri.startsWith("/img/")
-                || uri.startsWith("/webjars/")) {
-            return true;
-        }
+                || uri.startsWith("/webjars/");
+    }
 
-        HttpSession session = request.getSession(false);
+    private boolean esRutaAdmin(String uri) {
+        return uri.startsWith("/usuarios")
+                || uri.startsWith("/categorias");
+    }
 
-        if (session != null && session.getAttribute("usuario") != null) {
-            return true;
-        }
-
-        response.sendRedirect("/login");
-        return false;
+    private boolean esAdministrador(Usuario usuario) {
+        return usuario != null
+                && usuario.getRol() != null
+                && "ADMINISTRADOR".equals(usuario.getRol().name());
     }
 }

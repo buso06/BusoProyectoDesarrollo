@@ -1,1 +1,125 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Álbum</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><section class="card form"><h1>Formulario de álbum</h1><form method="post" action="/albumes/guardar" th:object="${album}"><input type="hidden" th:field="*{id}"><div class="field"><label>Nombre</label><input th:field="*{nombre}" required></div><div class="field"><label>Descripción</label><textarea th:field="*{descripcion}"></textarea></div><div class="field"><label><input type="checkbox" th:field="*{publico}"> Público</label></div><button class="btn">Guardar</button> <a class="btn gray" href="/albumes">Volver</a></form></section></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Álbum</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <h1 th:text="${modo == 'crear' ? 'Nuevo álbum' : 'Editar álbum'}">Álbum</h1>
+            <a class="btn gray" href="/albumes">Volver</a>
+        </div>
+
+        <section class="card">
+
+            <p class="error" th:if="${error}" th:text="${error}">
+                Error
+            </p>
+
+            <form method="post"
+                  th:action="${modo == 'crear'} ? @{/albumes/guardar} : @{/albumes/actualizar/{id}(id=${album.id})}">
+
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text"
+                           name="nombre"
+                           th:value="${album.nombre}"
+                           placeholder="Ejemplo: Viaje a la playa"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label>Descripción</label>
+                    <textarea name="descripcion"
+                              placeholder="Descripción del álbum"
+                              th:text="${album.descripcion}"></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Privacidad</label>
+                    <select name="publico" required>
+                        <option value="true" th:selected="${album.publico}">
+                            Público
+                        </option>
+                        <option value="false" th:selected="${!album.publico}">
+                            Privado con contraseña
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Color del álbum</label>
+
+                    <div class="color-options">
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#2563eb" th:checked="${album.color == null or album.color == '#2563eb'}">
+                            <span style="background:#2563eb;"></span>
+                            Azul
+                        </label>
+
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#16a34a" th:checked="${album.color == '#16a34a'}">
+                            <span style="background:#16a34a;"></span>
+                            Verde
+                        </label>
+
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#9333ea" th:checked="${album.color == '#9333ea'}">
+                            <span style="background:#9333ea;"></span>
+                            Morado
+                        </label>
+
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#db2777" th:checked="${album.color == '#db2777'}">
+                            <span style="background:#db2777;"></span>
+                            Rosa
+                        </label>
+
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#f97316" th:checked="${album.color == '#f97316'}">
+                            <span style="background:#f97316;"></span>
+                            Naranja
+                        </label>
+
+                        <label class="color-radio">
+                            <input type="radio" name="color" value="#0f172a" th:checked="${album.color == '#0f172a'}">
+                            <span style="background:#0f172a;"></span>
+                            Oscuro
+                        </label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Contraseña del álbum privado</label>
+                    <input type="password"
+                           name="claveTexto"
+                           placeholder="Solo si el álbum es privado">
+                    <small>
+                        Si el álbum es público, este campo se ignora.
+                        Si está editando y deja vacío este campo, se mantiene la contraseña actual.
+                    </small>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Guardar</button>
+                    <a class="btn gray" href="/albumes">Cancelar</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

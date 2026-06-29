@@ -22,11 +22,14 @@ public class AlbumRepository {
 
     private final RowMapper<Album> mapper = (rs, n) -> {
         Album a = new Album();
+
         a.setId(rs.getInt("id"));
         a.setUsuarioId(rs.getInt("usuario_id"));
         a.setNombre(rs.getString("nombre"));
         a.setDescripcion(rs.getString("descripcion"));
         a.setPublico(rs.getBoolean("publico"));
+        a.setClave(rs.getString("clave"));
+        a.setColor(rs.getString("color"));
 
         Timestamp t = rs.getTimestamp("fecha_creacion");
         if (t != null) {
@@ -37,7 +40,10 @@ public class AlbumRepository {
     };
 
     public List<Album> listar() {
-        return jdbc.query("SELECT * FROM albumes ORDER BY id DESC", mapper);
+        return jdbc.query(
+                "SELECT * FROM albumes ORDER BY id DESC",
+                mapper
+        );
     }
 
     public List<Album> listarPorUsuario(Integer usuarioId, boolean admin) {
@@ -62,40 +68,42 @@ public class AlbumRepository {
 
     public void guardar(Album a) {
         jdbc.update(
-                "INSERT INTO albumes(usuario_id, nombre, descripcion, publico) VALUES (?, ?, ?, ?)",
+                "INSERT INTO albumes(usuario_id, nombre, descripcion, publico, clave, color) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)",
                 a.getUsuarioId(),
                 a.getNombre(),
                 a.getDescripcion(),
-                a.isPublico()
+                a.isPublico(),
+                a.getClave(),
+                a.getColor()
         );
     }
 
     public void actualizar(Album a) {
         jdbc.update(
-                "UPDATE albumes SET nombre = ?, descripcion = ?, publico = ? WHERE id = ?",
+                "UPDATE albumes SET nombre = ?, descripcion = ?, publico = ?, clave = ?, color = ? WHERE id = ?",
                 a.getNombre(),
                 a.getDescripcion(),
                 a.isPublico(),
+                a.getClave(),
+                a.getColor(),
                 a.getId()
         );
     }
 
     @Transactional
     public void eliminar(Integer id) {
-        // Primero se eliminan los registros relacionados en archivos_compartidos
         jdbc.update(
                 "DELETE FROM archivos_compartidos WHERE archivo_id IN " +
-                "(SELECT id FROM archivos_multimedia WHERE album_id = ?)",
+                        "(SELECT id FROM archivos_multimedia WHERE album_id = ?)",
                 id
         );
 
-        // Luego se eliminan los archivos multimedia que pertenecen al álbum
         jdbc.update(
                 "DELETE FROM archivos_multimedia WHERE album_id = ?",
                 id
         );
 
-        // Finalmente se elimina el álbum
         jdbc.update(
                 "DELETE FROM albumes WHERE id = ?",
                 id

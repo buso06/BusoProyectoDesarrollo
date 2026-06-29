@@ -14,7 +14,11 @@
     <main class="content">
 
         <div class="top">
-            <h1>Álbumes</h1>
+            <div>
+                <h1>Álbumes</h1>
+                <p>Organiza tus fotos, videos y documentos por colecciones.</p>
+            </div>
+
             <a class="btn" href="/albumes/nuevo">Nuevo álbum</a>
         </div>
 
@@ -27,61 +31,77 @@
                 <a class="btn" href="/albumes/nuevo">Crear primer álbum</a>
             </div>
 
-            <table th:if="${albumes != null and !#lists.isEmpty(albumes)}">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Público</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
+            <div class="album-grid" th:if="${albumes != null and !#lists.isEmpty(albumes)}">
 
-                <tbody>
-                <tr th:each="a : ${albumes}">
-                    <td th:text="${a.id}">1</td>
+                <article class="album-card-solid"
+                         th:each="a : ${albumes}"
+                         th:style="'background:' + (${a.color} ?: '#2563eb')">
 
-                    <td th:text="${a.nombre}">Playa</td>
+                    <div class="album-menu">
 
-                    <td th:text="${a.descripcion}">Fotos y videos de playa</td>
+                        <details>
+                            <summary>⋯</summary>
 
-                    <td>
-                        <span class="badge"
-                              th:text="${a.publico ? 'Sí' : 'No'}">
-                            Sí
-                        </span>
-                    </td>
+                            <div class="album-dropdown">
 
-                    <td th:text="${a.fechaCreacion}">2026-06-23</td>
+                                <a th:href="@{/albumes/editar/{id}(id=${a.id})}">
+                                    Editar
+                                </a>
 
-                    <td class="actions">
+                                <form method="post"
+                                      th:action="@{/albumes/eliminar/{id}(id=${a.id})}">
+                                    <button type="submit"
+                                            onclick="return confirm('¿Seguro que deseas eliminar este álbum? También se eliminarán los archivos asociados.');">
+                                        Eliminar
+                                    </button>
+                                </form>
 
-                        <a class="btn"
-                           th:href="@{/albumes/ver/{id}(id=${a.id})}">
-                            Abrir
-                        </a>
+                            </div>
+                        </details>
 
-                        <a class="btn gray"
-                           th:href="@{/albumes/editar/{id}(id=${a.id})}">
-                            Editar
-                        </a>
+                    </div>
 
-                        <form method="post"
-                              th:action="@{/albumes/eliminar/{id}(id=${a.id})}"
-                              style="display:inline;">
-                            <button class="btn danger"
-                                    type="submit"
-                                    onclick="return confirm('¿Seguro que deseas eliminar este álbum? También se eliminarán los archivos asociados.');">
-                                Eliminar
-                            </button>
-                        </form>
+                    <a class="album-open-area"
+                       th:href="@{/albumes/ver/{id}(id=${a.id})}">
 
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                        <div class="album-main-icon">
+                            <span th:text="${a.publico ? '📁' : '🔒'}">📁</span>
+                        </div>
+
+                        <div class="album-card-info">
+
+                            <h3 th:text="${a.nombre}">Nombre del álbum</h3>
+
+                            <p th:if="${a.descripcion != null and !#strings.isEmpty(a.descripcion)}"
+                               th:text="${a.descripcion}">
+                                Descripción del álbum
+                            </p>
+
+                            <p th:if="${a.descripcion == null or #strings.isEmpty(a.descripcion)}">
+                                Sin descripción.
+                            </p>
+
+                        </div>
+
+                        <div class="album-card-footer">
+
+                            <span class="album-pill"
+                                  th:text="${a.publico ? 'Público' : 'Privado'}">
+                                Público
+                            </span>
+
+                            <span class="album-date"
+                                  th:text="${a.fechaCreacion}">
+                                Fecha
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </article>
+
+            </div>
 
         </section>
 
