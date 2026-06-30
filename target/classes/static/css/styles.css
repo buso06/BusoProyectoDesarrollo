@@ -1127,4 +1127,23 @@ tbody tr:hover {
     font-weight: 800;
 }
 
+.archivos-table td:nth-child(2),
+.archivos-table th:nth-child(2) {
+    width: 95px !important;
+    min-width: 95px !important;
+    max-width: 95px !important;
+}
+
+.archivos-table td:nth-child(2) img,
+.archivos-table td:nth-child(2) video {
+    width: 74px !important;
+    height: 74px !important;
+    min-width: 74px !important;
+    max-width: 74px !important;
+    min-height: 74px !important;
+    max-height: 74px !important;
+    object-fit: cover !important;
+    display: block !important;
+}
+
 }

@@ -1,3 +1,115 @@
 package cr.ac.ucr.mediacloud.model;
+
 import java.time.LocalDateTime;
-public class ArchivoMultimedia { private Integer id; private Integer usuarioId; private Integer albumId; private Integer categoriaId; private String nombreOriginal; private String nombreGuardado; private String tipoMime; private Long tamanioBytes; private String rutaRelativa; private EstadoArchivo estado; private LocalDateTime fechaCarga; private LocalDateTime fechaEliminacion; public Integer getId(){return id;} public void setId(Integer id){this.id=id;} public Integer getUsuarioId(){return usuarioId;} public void setUsuarioId(Integer usuarioId){this.usuarioId=usuarioId;} public Integer getAlbumId(){return albumId;} public void setAlbumId(Integer albumId){this.albumId=albumId;} public Integer getCategoriaId(){return categoriaId;} public void setCategoriaId(Integer categoriaId){this.categoriaId=categoriaId;} public String getNombreOriginal(){return nombreOriginal;} public void setNombreOriginal(String nombreOriginal){this.nombreOriginal=nombreOriginal;} public String getNombreGuardado(){return nombreGuardado;} public void setNombreGuardado(String nombreGuardado){this.nombreGuardado=nombreGuardado;} public String getTipoMime(){return tipoMime;} public void setTipoMime(String tipoMime){this.tipoMime=tipoMime;} public Long getTamanioBytes(){return tamanioBytes;} public void setTamanioBytes(Long tamanioBytes){this.tamanioBytes=tamanioBytes;} public String getRutaRelativa(){return rutaRelativa;} public void setRutaRelativa(String rutaRelativa){this.rutaRelativa=rutaRelativa;} public EstadoArchivo getEstado(){return estado;} public void setEstado(EstadoArchivo estado){this.estado=estado;} public LocalDateTime getFechaCarga(){return fechaCarga;} public void setFechaCarga(LocalDateTime fechaCarga){this.fechaCarga=fechaCarga;} public LocalDateTime getFechaEliminacion(){return fechaEliminacion;} public void setFechaEliminacion(LocalDateTime fechaEliminacion){this.fechaEliminacion=fechaEliminacion;} }
+
+public class ArchivoMultimedia {
+
+    private Integer id;
+    private Integer usuarioId;
+    private Integer albumId;
+    private Integer categoriaId;
+    private String nombreOriginal;
+    private String nombreGuardado;
+    private String tipoMime;
+    private Long tamanioBytes;
+    private String rutaRelativa;
+    private EstadoArchivo estado;
+    private LocalDateTime fechaCarga;
+    private LocalDateTime fechaEliminacion;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public Integer getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Integer albumId) {
+        this.albumId = albumId;
+    }
+
+    public Integer getCategoriaId() {
+        return categoriaId;
+    }
+
+    public void setCategoriaId(Integer categoriaId) {
+        this.categoriaId = categoriaId;
+    }
+
+    public String getNombreOriginal() {
+        return nombreOriginal;
+    }
+
+    public void setNombreOriginal(String nombreOriginal) {
+        this.nombreOriginal = nombreOriginal;
+    }
+
+    public String getNombreGuardado() {
+        return nombreGuardado;
+    }
+
+    public void setNombreGuardado(String nombreGuardado) {
+        this.nombreGuardado = nombreGuardado;
+    }
+
+    public String getTipoMime() {
+        return tipoMime;
+    }
+
+    public void setTipoMime(String tipoMime) {
+        this.tipoMime = tipoMime;
+    }
+
+    public Long getTamanioBytes() {
+        return tamanioBytes;
+    }
+
+    public void setTamanioBytes(Long tamanioBytes) {
+        this.tamanioBytes = tamanioBytes;
+    }
+
+    public String getRutaRelativa() {
+        return rutaRelativa;
+    }
+
+    public void setRutaRelativa(String rutaRelativa) {
+        this.rutaRelativa = rutaRelativa;
+    }
+
+    public EstadoArchivo getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoArchivo estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaCarga() {
+        return fechaCarga;
+    }
+
+    public void setFechaCarga(LocalDateTime fechaCarga) {
+        this.fechaCarga = fechaCarga;
+    }
+
+    public LocalDateTime getFechaEliminacion() {
+        return fechaEliminacion;
+    }
+
+    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
+        this.fechaEliminacion = fechaEliminacion;
+    }
+}
