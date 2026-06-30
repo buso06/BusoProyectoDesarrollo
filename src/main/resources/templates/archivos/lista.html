@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>MediaCloud | Archivos</title>
+    <title>Archivos</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -15,69 +14,63 @@
 
     <main class="content">
 
-        <div class="top">
+        <div class="page-header">
             <div>
-                <h1>Archivos multimedia</h1>
-                <p>Administre sus fotos, videos y documentos guardados en MediaCloud.</p>
+                <h1>Archivos</h1>
+                <p>Gestiona tus archivos multimedia locales.</p>
             </div>
 
-            <a class="btn" href="/archivos/nuevo">Subir archivo</a>
+            <a th:href="@{/archivos/nuevo}" class="btn">Subir archivo</a>
         </div>
 
         <section class="card">
-
             <h2>Filtros</h2>
 
-            <form method="get" action="/archivos">
+            <form method="get" th:action="@{/archivos}">
 
-                <div class="field">
-                    <label>Estado</label>
+                <label>
+                    Estado
                     <select name="estado">
                         <option value="">Todos los estados</option>
+
                         <option th:each="e : ${estados}"
                                 th:value="${e}"
                                 th:text="${e}"
                                 th:selected="${estado == e.name()}">
                         </option>
                     </select>
-                </div>
+                </label>
 
-                <div class="field">
-                    <label>Categoría</label>
+                <label>
+                    Categoría
                     <select name="categoriaId">
                         <option value="">Todas las categorías</option>
+
                         <option th:each="c : ${categorias}"
                                 th:value="${c.id}"
                                 th:text="${c.nombre}"
-                                th:selected="${categoriaId != null and categoriaId == c.id}">
+                                th:selected="${categoriaId == c.id}">
                         </option>
                     </select>
-                </div>
+                </label>
 
-                <div class="actions">
-                    <button class="btn" type="submit">Filtrar</button>
-                    <a class="btn gray" href="/archivos">Limpiar</a>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Filtrar</button>
+                    <a th:href="@{/archivos}" class="btn gray">Limpiar</a>
                 </div>
 
             </form>
-
         </section>
 
         <section class="card archivos-card">
-
             <h2>Mis archivos</h2>
 
-            <div th:if="${archivos == null or #lists.isEmpty(archivos)}">
-                <p>No hay archivos registrados todavía.</p>
-                <a class="btn" href="/archivos/nuevo">Subir primer archivo</a>
-            </div>
-
-            <div class="archivos-table-wrap" th:if="${archivos != null and !#lists.isEmpty(archivos)}">
-
+            <div class="archivos-table-wrap">
                 <table class="archivos-table">
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Vista previa</th>
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Tamaño</th>
@@ -88,52 +81,145 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="a : ${archivos}">
-                        <td th:text="${a.id}">1</td>
-                        <td th:text="${a.nombreOriginal}">archivo.jpg</td>
-                        <td th:text="${a.tipoMime}">image/jpeg</td>
-                        <td th:text="${a.tamanioBytes + ' bytes'}">1000 bytes</td>
 
-                        <td>
-                            <span class="badge" th:text="${a.estado}">ACTIVO</span>
+                    <tr th:each="a : ${archivos}">
+                        <td th:text="${a.id}"></td>
+
+                        <td style="width:95px; min-width:95px; max-width:95px;">
+                            <div style="width:74px;
+                                        height:74px;
+                                        min-width:74px;
+                                        max-width:74px;
+                                        overflow:hidden;
+                                        border-radius:14px;
+                                        background:#f1f5f9;
+                                        border:1px solid #d9e2ec;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;">
+
+                                <img th:if="${#strings.startsWith(a.tipoMime, 'image/')}"
+                                     th:src="@{/archivos/ver/{id}(id=${a.id})}"
+                                     alt="Vista previa"
+                                     width="74"
+                                     height="74"
+                                     style="width:74px;
+                                            height:74px;
+                                            min-width:74px;
+                                            max-width:74px;
+                                            min-height:74px;
+                                            max-height:74px;
+                                            object-fit:cover;
+                                            border-radius:14px;
+                                            display:block;">
+
+                                <video th:if="${#strings.startsWith(a.tipoMime, 'video/')}"
+                                       muted
+                                       width="74"
+                                       height="74"
+                                       style="width:74px;
+                                              height:74px;
+                                              min-width:74px;
+                                              max-width:74px;
+                                              min-height:74px;
+                                              max-height:74px;
+                                              object-fit:cover;
+                                              border-radius:14px;
+                                              display:block;">
+                                    <source th:src="@{/archivos/ver/{id}(id=${a.id})}"
+                                            th:type="${a.tipoMime}">
+                                </video>
+
+                                <span th:if="${#strings.startsWith(a.tipoMime, 'audio/')}"
+                                      style="font-size:13px;
+                                             font-weight:900;
+                                             color:#334e68;
+                                             text-align:center;
+                                             line-height:1.2;">
+                                    🎵 Audio
+                                </span>
+
+                                <span th:if="${!#strings.startsWith(a.tipoMime, 'image/')
+                                           and !#strings.startsWith(a.tipoMime, 'video/')
+                                           and !#strings.startsWith(a.tipoMime, 'audio/')}"
+                                      style="font-size:13px;
+                                             font-weight:900;
+                                             color:#334e68;
+                                             text-align:center;
+                                             line-height:1.2;">
+                                    📄 Archivo
+                                </span>
+
+                            </div>
                         </td>
 
-                        <td th:text="${a.fechaCarga}">2026-06-26</td>
+                        <td style="max-width:260px; white-space:normal; word-break:break-word;"
+                            th:text="${a.nombreOriginal}">
+                        </td>
+
+                        <td th:text="${a.tipoMime}"></td>
+
+                        <td th:text="${a.tamanioBytes + ' bytes'}"></td>
+
+                        <td>
+                            <span class="badge" th:text="${a.estado}"></span>
+                        </td>
+
+                        <td th:text="${a.fechaCarga}"></td>
 
                         <td class="actions-cell">
                             <div class="file-menu">
                                 <details>
-                                    <summary class="file-menu-button" title="Opciones">⋮</summary>
+                                    <summary class="file-menu-button">⋮</summary>
 
                                     <div class="file-dropdown">
-                                        <a th:href="@{/archivos/editar/{id}(id=${a.id})}">Editar</a>
+
+                                        <a th:href="@{/archivos/editar/{id}(id=${a.id})}">
+                                            Editar
+                                        </a>
 
                                         <a th:href="@{/archivos/ver/{id}(id=${a.id})}"
-                                           target="_blank">Abrir</a>
+                                           target="_blank">
+                                            Abrir
+                                        </a>
 
-                                        <a th:href="@{/archivos/descargar/{id}(id=${a.id})}">Descargar</a>
+                                        <a th:href="@{/archivos/descargar/{id}(id=${a.id})}">
+                                            Descargar
+                                        </a>
 
-                                        <form method="post"
-                                              th:action="@{/archivos/papelera/{id}(id=${a.id})}">
-                                            <button type="submit">Enviar a papelera</button>
+                                        <form th:action="@{/archivos/papelera/{id}(id=${a.id})}"
+                                              method="post">
+                                            <button type="submit">
+                                                Enviar a papelera
+                                            </button>
                                         </form>
 
-                                        <form method="post"
-                                              th:action="@{/archivos/eliminar/{id}(id=${a.id})}">
-                                            <button type="submit"
-                                                    class="danger-option"
-                                                    onclick="return confirm('¿Seguro que deseas eliminar este archivo definitivamente?');">
+                                        <form th:action="@{/archivos/eliminar/{id}(id=${a.id})}"
+                                              method="post"
+                                              onsubmit="return confirm('¿Seguro que quieres eliminar este archivo definitivamente?');">
+                                            <button type="submit" class="danger-option">
                                                 Eliminar
                                             </button>
                                         </form>
+
                                     </div>
                                 </details>
                             </div>
                         </td>
                     </tr>
+
+                    <tr th:if="${#lists.isEmpty(archivos)}">
+                        <td colspan="8"
+                            style="text-align:center;
+                                   padding:24px;
+                                   color:#627d98;
+                                   font-weight:800;">
+                            No hay archivos registrados.
+                        </td>
+                    </tr>
+
                     </tbody>
                 </table>
-
             </div>
 
         </section>

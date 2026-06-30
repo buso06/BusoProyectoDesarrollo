@@ -140,7 +140,23 @@ public class ArchivoController {
 
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
-        archivos.eliminar(id);
+        ArchivoMultimedia archivo = archivos.buscar(id).orElseThrow();
+
+        try {
+            if (archivo.getRutaRelativa() != null && !archivo.getRutaRelativa().isBlank()) {
+                Path ruta = Paths.get(archivo.getRutaRelativa());
+
+                if (Files.exists(ruta)) {
+                    Files.delete(ruta);
+                }
+            }
+
+            archivos.eliminar(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo eliminar el archivo definitivamente", e);
+        }
+
         return "redirect:/archivos";
     }
 

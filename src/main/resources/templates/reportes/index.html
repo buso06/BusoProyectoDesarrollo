@@ -1,1 +1,51 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Reportes</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><h1>Reportes</h1><section class="card"><h2>Archivos por categoría</h2><table><tr><th>Categoría</th><th>Cantidad</th></tr><tr th:each="r:${reporteCategorias}"><td th:text="${r.categoria}"></td><td th:text="${r.cantidad}"></td></tr></table></section></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1>Reportes</h1>
+                <p>Resumen de información registrada en MediaCloud.</p>
+            </div>
+        </div>
+
+        <section class="card">
+
+            <h2>Archivos por categoría</h2>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Cantidad</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="r : ${reporteCategorias}">
+                    <td th:text="${r.categoria}">Categoría</td>
+                    <td th:text="${r.cantidad}">0</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

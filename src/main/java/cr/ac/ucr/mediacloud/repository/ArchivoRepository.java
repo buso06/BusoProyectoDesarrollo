@@ -36,9 +36,14 @@ public class ArchivoRepository {
         a.setRutaRelativa(rs.getString("ruta_relativa"));
         a.setEstado(EstadoArchivo.valueOf(rs.getString("estado")));
 
-        Timestamp t = rs.getTimestamp("fecha_carga");
-        if (t != null) {
-            a.setFechaCarga(t.toLocalDateTime());
+        Timestamp fechaCarga = rs.getTimestamp("fecha_carga");
+        if (fechaCarga != null) {
+            a.setFechaCarga(fechaCarga.toLocalDateTime());
+        }
+
+        Timestamp fechaEliminacion = rs.getTimestamp("fecha_eliminacion");
+        if (fechaEliminacion != null) {
+            a.setFechaEliminacion(fechaEliminacion.toLocalDateTime());
         }
 
         return a;
@@ -124,7 +129,7 @@ public class ArchivoRepository {
 
     public void eliminar(Integer id) {
         jdbc.update(
-                "UPDATE archivos_multimedia SET estado = 'ELIMINADO' WHERE id = ?",
+                "DELETE FROM archivos_multimedia WHERE id = ?",
                 id
         );
     }
