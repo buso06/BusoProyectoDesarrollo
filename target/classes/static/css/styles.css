@@ -115,6 +115,10 @@ body.login p {
     cursor: pointer;
 }
 
+.sidebar button:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
 .content {
     flex: 1;
     padding: 34px;
@@ -324,6 +328,7 @@ tbody tr:hover {
     border-radius: 14px;
     font-weight: 800;
     border: 1px solid #fecaca;
+    margin-bottom: 16px;
 }
 
 .alert.success {
@@ -333,6 +338,7 @@ tbody tr:hover {
     border-radius: 14px;
     font-weight: 800;
     border: 1px solid #bbf7d0;
+    margin-bottom: 16px;
 }
 
 .footer-note {
@@ -698,38 +704,307 @@ tbody tr:hover {
 }
 
 /* =========================
-   Responsive
+   Checkbox visible - Usuario activo
    ========================= */
 
-@media (max-width: 850px) {
+.active-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border: 1px solid #d9e2ec;
+    border-radius: 18px;
+    background: #f8fafc;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.active-box:hover {
+    background: #eef4ff;
+    border-color: #bfdbfe;
+}
+
+.active-box input {
+    display: none;
+}
+
+.active-check {
+    width: 52px;
+    height: 30px;
+    border-radius: 999px;
+    background: #cbd5e1;
+    position: relative;
+    flex-shrink: 0;
+    transition: 0.2s ease;
+}
+
+.active-check::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 6px rgba(16, 42, 67, 0.25);
+    transition: 0.2s ease;
+}
+
+.active-box input:checked + .active-check {
+    background: #2563eb;
+}
+
+.active-box input:checked + .active-check::before {
+    transform: translateX(22px);
+}
+
+.active-box strong {
+    display: block;
+    color: #102a43;
+    font-size: 15px;
+}
+
+.active-box small {
+    display: block;
+    color: #627d98;
+    margin-top: 3px;
+}
+
+/* =========================
+   Responsive general
+   ========================= */
+
+@media (max-width: 900px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
     .layout {
         flex-direction: column;
+        width: 100%;
+        min-height: 100vh;
     }
 
     .sidebar {
         width: 100%;
         min-height: auto;
         position: relative;
+        top: auto;
+        padding: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sidebar strong,
+    .sidebar h1,
+    .sidebar h2 {
+        width: 100%;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+
+    .sidebar a {
+        margin: 0;
+        padding: 10px 12px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .sidebar a:hover {
+        transform: none;
+    }
+
+    .sidebar form {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .sidebar button {
+        padding: 11px;
+        border-radius: 14px;
     }
 
     .content {
-        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        padding: 18px;
+        margin: 0;
     }
 
     .top,
     .page-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 14px;
     }
 
-    
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+    .top h1,
+    .page-header h1 {
+        font-size: 28px;
+    }
+
+    .top p,
+    .page-header p {
+        font-size: 14px;
+    }
+
+    .card {
+        width: 100%;
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .actions,
+    .form-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn,
+    a.btn,
+    button.btn {
+        width: 100%;
+    }
+
+    .stats,
+    .dashboard-grid {
+        grid-template-columns: 1fr;
     }
 
     .album-grid {
         grid-template-columns: 1fr;
+    }
+
+    .active-box {
+        align-items: flex-start;
+    }
+}
+
+/* =========================
+   Responsive para tablas
+   ========================= */
+
+@media (max-width: 900px) {
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        border-radius: 18px;
+    }
+
+    thead,
+    tbody,
+    tr {
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .archivos-table-wrap {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+    }
+
+    .archivos-table {
+        min-width: 760px;
+    }
+
+    .file-dropdown {
+        right: auto !important;
+        left: 0 !important;
+    }
+}
+
+/* =========================
+   Celulares pequeños
+   ========================= */
+
+@media (max-width: 480px) {
+
+    .content {
+        padding: 14px;
+    }
+
+    .top h1,
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .card {
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .sidebar {
+        padding: 14px;
+    }
+
+    .sidebar a {
+        font-size: 13px;
+        padding: 9px 10px;
+    }
+
+    .sidebar button {
+        font-size: 13px;
+    }
+
+    th,
+    td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card strong {
+        font-size: 26px;
+    }
+
+    .album-card-solid,
+    .album-open-area {
+        min-height: 190px;
+    }
+
+    .album-card-info h3 {
+        font-size: 19px;
+    }
+
+    .active-box {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .active-check {
+        width: 48px;
+        height: 28px;
+    }
+
+    .active-check::before {
+        width: 22px;
+        height: 22px;
+    }
+
+    .active-box input:checked + .active-check::before {
+        transform: translateX(20px);
     }
 }

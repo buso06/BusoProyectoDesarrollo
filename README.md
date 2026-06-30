@@ -85,7 +85,3 @@ El proyecto usa una arquitectura por capas:
 - `templates`: vistas Thymeleaf.
 - `static/css`: estilos visuales.
 - `database`: scripts SQL.
-
-## Nota de defensa
-
-Aunque el descriptor original menciona JSP y Servlets, esta versión usa Spring Boot MVC con Thymeleaf. La idea para defenderlo es explicar que Spring Boot mantiene el patrón MVC, mejora la organización por capas y permite una aplicación más moderna y fácil de mantener, conservando MySQL y JDBC como base de persistencia.

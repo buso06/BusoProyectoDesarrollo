@@ -1,1 +1,97 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Usuario</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><section class="card form"><h1>Formulario de usuario</h1><form method="post" action="/usuarios/guardar" th:object="${usuarioForm}"><input type="hidden" th:field="*{id}"><div class="field"><label>Nombre</label><input th:field="*{nombre}" required></div><div class="field"><label>Correo</label><input th:field="*{correo}" type="email" required></div><div class="field" th:if="*{id == null}"><label>Contraseña</label><input th:field="*{clave}" type="password" required></div><div class="field"><label>Rol</label><select th:field="*{rol}"><option th:each="r:${roles}" th:value="${r}" th:text="${r}"></option></select></div><div class="field"><label><input type="checkbox" th:field="*{activo}"> Activo</label></div><button class="btn">Guardar</button> <a class="btn gray" href="/usuarios">Volver</a></form></section></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCloud | Usuario</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1 th:text="${modo == 'editar'} ? 'Editar usuario' : 'Nuevo usuario'">
+                    Nuevo usuario
+                </h1>
+                <p>Complete la información del usuario del sistema.</p>
+            </div>
+        </div>
+
+        <section class="card">
+
+            <div class="alert error" th:if="${error != null}" th:text="${error}">
+                Error
+            </div>
+
+            <form method="post"
+                  th:object="${usuario}"
+                  th:action="${modo == 'editar'} ? @{/usuarios/actualizar/{id}(id=${usuario.id})} : @{/usuarios/guardar}">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="field">
+                    <label>Nombre</label>
+                    <input type="text" th:field="*{nombre}" required>
+                </div>
+
+                <div class="field">
+                    <label>Correo</label>
+                    <input type="email" th:field="*{correo}" required>
+                </div>
+
+                <div class="field">
+                    <label>Contraseña</label>
+
+                    <input type="password"
+                           name="claveTexto"
+                           th:required="${modo == 'crear'}">
+
+                    <small th:if="${modo == 'editar'}">
+                        Deje este campo vacío si no desea cambiar la contraseña.
+                    </small>
+                </div>
+
+                <div class="field">
+                    <label>Rol</label>
+                    <select th:field="*{rol}">
+                        <option th:each="r : ${roles}"
+                                th:value="${r}"
+                                th:text="${r}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Estado del usuario</label>
+
+                    <label class="active-box">
+                        <input type="checkbox" th:field="*{activo}">
+                        <span class="active-check"></span>
+
+                        <div>
+                            <strong>Usuario activo</strong>
+                            <small>Permite que este usuario pueda iniciar sesión en MediaCloud.</small>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Guardar</button>
+                    <a class="btn gray" href="/usuarios">Volver</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

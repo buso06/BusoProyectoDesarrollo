@@ -1,1 +1,49 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Categoría</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><section class="card form"><h1>Formulario de categoría</h1><form method="post" action="/categorias/guardar" th:object="${categoria}"><input type="hidden" th:field="*{id}"><div class="field"><label>Nombre</label><input th:field="*{nombre}" required></div><div class="field"><label>Descripción</label><textarea th:field="*{descripcion}"></textarea></div><button class="btn">Guardar</button> <a class="btn gray" href="/categorias">Volver</a></form></section></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categoría</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <section class="card form">
+
+            <h1>Formulario de categoría</h1>
+
+            <form method="post" action="/categorias/guardar" th:object="${categoria}">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="field">
+                    <label>Nombre</label>
+                    <input th:field="*{nombre}" required>
+                </div>
+
+                <div class="field">
+                    <label>Descripción</label>
+                    <textarea th:field="*{descripcion}"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" type="submit">Guardar</button>
+                    <a class="btn gray" href="/categorias">Volver</a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

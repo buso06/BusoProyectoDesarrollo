@@ -1,1 +1,82 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Usuarios</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><div class="top"><h1>Usuarios</h1><a class="btn" href="/usuarios/nuevo">Nuevo usuario</a></div><table><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Activo</th><th>Acciones</th></tr><tr th:each="u:${usuarios}"><td th:text="${u.id}"></td><td th:text="${u.nombre}"></td><td th:text="${u.correo}"></td><td><span class="badge" th:text="${u.rol}"></span></td><td th:text="${u.activo?'Sí':'No'}"></td><td class="actions"><a class="btn gray" th:href="@{/usuarios/editar/{id}(id=${u.id})}">Editar</a><form method="post" th:action="@{/usuarios/desactivar/{id}(id=${u.id})}"><button class="btn danger">Desactivar</button></form></td></tr></table></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaCloud | Usuarios</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1>Usuarios</h1>
+                <p>Administre las cuentas de acceso a MediaCloud.</p>
+            </div>
+
+            <a class="btn" href="/usuarios/nuevo">Nuevo usuario</a>
+        </div>
+
+        <section class="card">
+
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Activo</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="u : ${usuarios}">
+                    <td th:text="${u.id}">1</td>
+
+                    <td th:text="${u.nombre}">Usuario</td>
+
+                    <td th:text="${u.correo}">correo@email.com</td>
+
+                    <td>
+                        <span class="badge" th:text="${u.rol}">USUARIO</span>
+                    </td>
+
+                    <td th:text="${u.activo ? 'Sí' : 'No'}">Sí</td>
+
+                    <td>
+                        <div class="actions">
+                            <a class="btn gray"
+                               th:href="@{/usuarios/editar/{id}(id=${u.id})}">
+                                Editar
+                            </a>
+
+                            <form method="post"
+                                  th:action="@{/usuarios/desactivar/{id}(id=${u.id})}">
+                                <button class="btn danger"
+                                        type="submit"
+                                        onclick="return confirm('¿Desea desactivar este usuario?');">
+                                    Desactivar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,1 +1,74 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Categorías</title><link rel="stylesheet" href="/css/styles.css"></head><body><div class="layout"><div th:replace="~{fragments/sidebar :: sidebar}"></div><main class="content"><div class="top"><h1>Categorías</h1><a class="btn" href="/categorias/nuevo">Nueva categoría</a></div><table><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Acciones</th></tr><tr th:each="c:${categorias}"><td th:text="${c.id}"></td><td th:text="${c.nombre}"></td><td th:text="${c.descripcion}"></td><td class="actions"><a class="btn gray" th:href="@{/categorias/editar/{id}(id=${c.id})}">Editar</a><form method="post" th:action="@{/categorias/eliminar/{id}(id=${c.id})}"><button class="btn danger">Eliminar</button></form></td></tr></table></main></div></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <main class="content">
+
+        <div class="top">
+            <div>
+                <h1>Categorías</h1>
+                <p>Administre las categorías para organizar los archivos multimedia.</p>
+            </div>
+
+            <a class="btn" href="/categorias/nuevo">Nueva categoría</a>
+        </div>
+
+        <section class="card">
+
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="c : ${categorias}">
+                    <td th:text="${c.id}">1</td>
+
+                    <td th:text="${c.nombre}">Categoría</td>
+
+                    <td th:text="${c.descripcion}">Descripción</td>
+
+                    <td>
+                        <div class="actions">
+                            <a class="btn gray"
+                               th:href="@{/categorias/editar/{id}(id=${c.id})}">
+                                Editar
+                            </a>
+
+                            <form method="post"
+                                  th:action="@{/categorias/eliminar/{id}(id=${c.id})}">
+                                <button class="btn danger"
+                                        type="submit"
+                                        onclick="return confirm('¿Seguro que desea eliminar esta categoría?');">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

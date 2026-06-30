@@ -18,14 +18,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String uri = request.getRequestURI();
 
-        // Rutas públicas: se pueden abrir sin iniciar sesión
         if (esRutaPublica(uri)) {
             return true;
         }
 
         HttpSession session = request.getSession(false);
 
-        // Si no hay sesión o no hay usuario logueado, vuelve al login
         if (session == null || session.getAttribute("usuario") == null) {
             response.sendRedirect("/login");
             return false;

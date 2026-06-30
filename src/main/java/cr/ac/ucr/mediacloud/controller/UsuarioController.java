@@ -56,7 +56,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Usuario usuario,
+    public String guardar(@ModelAttribute("usuario") Usuario usuario,
                           @RequestParam String claveTexto,
                           HttpSession session,
                           Model model) {
@@ -116,7 +116,7 @@ public class UsuarioController {
 
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Integer id,
-                             @ModelAttribute Usuario usuario,
+                             @ModelAttribute("usuario") Usuario usuario,
                              @RequestParam(required = false) String claveTexto,
                              HttpSession session,
                              Model model) {
@@ -139,11 +139,17 @@ public class UsuarioController {
 
         Usuario actual = usuarios.buscar(id).orElseThrow();
 
-        usuarios.buscarPorCorreo(usuario.getCorreo()).ifPresent(existente -> {
+        if (usuarios.buscarPorCorreo(usuario.getCorreo()).isPresent()) {
+            Usuario existente = usuarios.buscarPorCorreo(usuario.getCorreo()).get();
+
             if (!existente.getId().equals(id)) {
-                throw new RuntimeException("Correo repetido");
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("roles", Rol.values());
+                model.addAttribute("modo", "editar");
+                model.addAttribute("error", "Ya existe otro usuario con ese correo.");
+                return "usuarios/form";
             }
-        });
+        }
 
         if (usuario.getRol() == null) {
             usuario.setRol(actual.getRol());
@@ -159,12 +165,69 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    @PostMapping("/desactivar/{id}")
+    public String desactivar(@PathVariable Integer id,
+                             HttpSession session) {
+
+        if (!esAdmin(session)) {
+            return "redirect:/dashboard";
+        }
+
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioSesion == null) {
+            return "redirect:/login";
+        }
+
+        /*
+         * Evita que el administrador se desactive a sí mismo.
+         */
+        if (usuarioSesion.getId() != null && usuarioSesion.getId().equals(id)) {
+            return "redirect:/usuarios";
+        }
+
+        Usuario usuarioADesactivar = usuarios.buscar(id).orElseThrow();
+
+        /*
+         * Evita desactivar usuarios administradores.
+         * Así no te quedás sin admin por accidente.
+         */
+        if (usuarioADesactivar.getRol() != null
+                && usuarioADesactivar.getRol() == Rol.ADMINISTRADOR) {
+            return "redirect:/usuarios";
+        }
+
+        usuarios.eliminar(id);
+
+        return "redirect:/usuarios";
+    }
+
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id,
                            HttpSession session) {
 
         if (!esAdmin(session)) {
             return "redirect:/dashboard";
+        }
+
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuario");
+
+        if (usuarioSesion == null) {
+            return "redirect:/login";
+        }
+
+        /*
+         * También protegemos esta ruta por si algún botón usa /eliminar.
+         */
+        if (usuarioSesion.getId() != null && usuarioSesion.getId().equals(id)) {
+            return "redirect:/usuarios";
+        }
+
+        Usuario usuarioAEliminar = usuarios.buscar(id).orElseThrow();
+
+        if (usuarioAEliminar.getRol() != null
+                && usuarioAEliminar.getRol() == Rol.ADMINISTRADOR) {
+            return "redirect:/usuarios";
         }
 
         usuarios.eliminar(id);
@@ -177,6 +240,7 @@ public class UsuarioController {
 
         return usuario != null
                 && usuario.getRol() != null
-                && "ADMINISTRADOR".equals(usuario.getRol().name());
+                && usuario.getRol() == Rol.ADMINISTRADOR
+                && usuario.isActivo();
     }
 }
