@@ -2,8 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categoría</title>
+    <title>MediaCloud | Categoría</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -14,27 +13,45 @@
 
     <main class="content">
 
-        <section class="card form">
+        <div class="top">
+            <div>
+                <h1 th:text="${categoria.id == null ? 'Nueva categoría' : 'Editar categoría'}">
+                    Categoría
+                </h1>
+                <p>Complete los datos para clasificar mejor los archivos multimedia.</p>
+            </div>
 
-            <h1>Formulario de categoría</h1>
+            <a class="btn gray" href="/categorias">Volver</a>
+        </div>
 
-            <form method="post" action="/categorias/guardar" th:object="${categoria}">
+        <section class="card">
 
-                <input type="hidden" th:field="*{id}">
+            <p class="error" th:if="${error}" th:text="${error}">
+                Error
+            </p>
+
+            <form method="post"
+                  th:action="${categoria.id == null} ? @{/categorias/guardar} : @{/categorias/actualizar/{id}(id=${categoria.id})}">
 
                 <div class="field">
                     <label>Nombre</label>
-                    <input th:field="*{nombre}" required>
+                    <input type="text"
+                           name="nombre"
+                           th:value="${categoria.nombre}"
+                           placeholder="Ejemplo: Fotos, Videos, Documentos"
+                           required>
                 </div>
 
                 <div class="field">
                     <label>Descripción</label>
-                    <textarea th:field="*{descripcion}"></textarea>
+                    <textarea name="descripcion"
+                              placeholder="Descripción de la categoría"
+                              th:text="${categoria.descripcion}"></textarea>
                 </div>
 
                 <div class="actions">
                     <button class="btn" type="submit">Guardar</button>
-                    <a class="btn gray" href="/categorias">Volver</a>
+                    <a class="btn gray" href="/categorias">Cancelar</a>
                 </div>
 
             </form>

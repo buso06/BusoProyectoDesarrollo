@@ -27,6 +27,9 @@ import cr.ac.ucr.mediacloud.repository.ArchivoRepository;
 import cr.ac.ucr.mediacloud.repository.CategoriaRepository;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for multimedia file management.
+ */
 @Controller
 @RequestMapping("/archivos")
 public class ArchivoController {
@@ -38,6 +41,9 @@ public class ArchivoController {
     @Value("${mediacloud.upload-dir}")
     private String uploadDir;
 
+    /**
+     * Creates the file controller.
+     */
     public ArchivoController(ArchivoRepository archivos,
                              AlbumRepository albumes,
                              CategoriaRepository categorias) {
@@ -46,6 +52,9 @@ public class ArchivoController {
         this.categorias = categorias;
     }
 
+    /**
+     * Shows the file list with filters.
+     */
     @GetMapping
     public String listar(@RequestParam(required = false) String estado,
                          @RequestParam(required = false) Integer categoriaId,
@@ -60,6 +69,9 @@ public class ArchivoController {
         return "archivos/lista";
     }
 
+    /**
+     * Shows the form to upload a file.
+     */
     @GetMapping("/nuevo")
     public String nuevo(Model m) {
         m.addAttribute("albumes", albumes.listar());
@@ -67,6 +79,9 @@ public class ArchivoController {
         return "archivos/form";
     }
 
+    /**
+     * Saves an uploaded file.
+     */
     @PostMapping("/guardar")
     public String guardar(@RequestParam MultipartFile archivo,
                           @RequestParam(required = false) Integer albumId,
@@ -113,6 +128,9 @@ public class ArchivoController {
         return "redirect:/archivos";
     }
 
+    /**
+     * Shows the form to edit a file.
+     */
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Integer id, Model m) {
         m.addAttribute("archivo", archivos.buscar(id).orElseThrow());
@@ -122,6 +140,9 @@ public class ArchivoController {
         return "archivos/editar";
     }
 
+    /**
+     * Updates file data.
+     */
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Integer id,
                              @RequestParam(required = false) Integer albumId,
@@ -132,12 +153,18 @@ public class ArchivoController {
         return "redirect:/archivos";
     }
 
+    /**
+     * Moves a file to trash.
+     */
     @PostMapping("/papelera/{id}")
     public String papelera(@PathVariable Integer id) {
         archivos.papelera(id);
         return "redirect:/archivos";
     }
 
+    /**
+     * Deletes a file permanently.
+     */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
         ArchivoMultimedia archivo = archivos.buscar(id).orElseThrow();
@@ -160,6 +187,9 @@ public class ArchivoController {
         return "redirect:/archivos";
     }
 
+    /**
+     * Opens a file in the browser.
+     */
     @GetMapping("/ver/{id}")
     public ResponseEntity<InputStreamResource> ver(@PathVariable Integer id) throws Exception {
         ArchivoMultimedia archivo = archivos.buscar(id).orElseThrow();
@@ -180,6 +210,9 @@ public class ArchivoController {
                 .body(recurso);
     }
 
+    /**
+     * Downloads a file.
+     */
     @GetMapping("/descargar/{id}")
     public ResponseEntity<InputStreamResource> descargar(@PathVariable Integer id) throws Exception {
         ArchivoMultimedia archivo = archivos.buscar(id).orElseThrow();

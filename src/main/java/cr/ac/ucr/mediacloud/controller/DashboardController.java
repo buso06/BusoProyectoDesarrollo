@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Controller for the dashboard page.
+ */
 @Controller
 public class DashboardController {
 
@@ -13,6 +16,9 @@ public class DashboardController {
     private final ArchivoRepository ar;
     private final CategoriaRepository c;
 
+    /**
+     * Creates the dashboard controller.
+     */
     public DashboardController(UsuarioRepository u,
                                AlbumRepository a,
                                ArchivoRepository ar,
@@ -23,6 +29,9 @@ public class DashboardController {
         this.c = c;
     }
 
+    /**
+     * Shows the dashboard with system totals.
+     */
     @GetMapping("/dashboard")
     public String dash(Model m) {
         m.addAttribute("totalUsuarios", u.total());

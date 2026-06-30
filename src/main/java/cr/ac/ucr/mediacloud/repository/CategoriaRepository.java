@@ -9,15 +9,24 @@ import org.springframework.stereotype.Repository;
 
 import cr.ac.ucr.mediacloud.model.Categoria;
 
+/**
+ * Repository for category database operations.
+ */
 @Repository
 public class CategoriaRepository {
 
     private final JdbcTemplate jdbc;
 
+    /**
+     * Creates the category repository.
+     */
     public CategoriaRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    /**
+     * Maps a database row to a Categoria object.
+     */
     private final RowMapper<Categoria> mapper = (rs, n) -> {
         Categoria c = new Categoria();
 
@@ -28,6 +37,9 @@ public class CategoriaRepository {
         return c;
     };
 
+    /**
+     * Lists all categories.
+     */
     public List<Categoria> listar() {
         return jdbc.query(
                 "SELECT * FROM categorias ORDER BY nombre",
@@ -35,6 +47,9 @@ public class CategoriaRepository {
         );
     }
 
+    /**
+     * Finds a category by id.
+     */
     public Optional<Categoria> buscar(Integer id) {
         return jdbc.query(
                 "SELECT * FROM categorias WHERE id=?",
@@ -43,6 +58,9 @@ public class CategoriaRepository {
         ).stream().findFirst();
     }
 
+    /**
+     * Saves a new category.
+     */
     public void guardar(Categoria c) {
         jdbc.update(
                 "INSERT INTO categorias(nombre,descripcion) VALUES(?,?)",
@@ -51,6 +69,9 @@ public class CategoriaRepository {
         );
     }
 
+    /**
+     * Updates a category.
+     */
     public void actualizar(Categoria c) {
         jdbc.update(
                 "UPDATE categorias SET nombre=?, descripcion=? WHERE id=?",
@@ -60,6 +81,9 @@ public class CategoriaRepository {
         );
     }
 
+    /**
+     * Deletes a category.
+     */
     public void eliminar(Integer id) {
         jdbc.update(
                 "DELETE FROM categorias WHERE id=?",
@@ -67,6 +91,9 @@ public class CategoriaRepository {
         );
     }
 
+    /**
+     * Counts all categories.
+     */
     public int total() {
         return jdbc.queryForObject(
                 "SELECT COUNT(*) FROM categorias",

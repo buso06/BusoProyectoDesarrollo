@@ -2,8 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorías</title>
+    <title>MediaCloud | Categorías</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -17,7 +16,7 @@
         <div class="top">
             <div>
                 <h1>Categorías</h1>
-                <p>Administre las categorías para organizar los archivos multimedia.</p>
+                <p>Administre las categorías usadas para clasificar archivos multimedia.</p>
             </div>
 
             <a class="btn" href="/categorias/nuevo">Nueva categoría</a>
@@ -25,7 +24,14 @@
 
         <section class="card">
 
-            <table>
+            <h2>Listado de categorías</h2>
+
+            <div th:if="${categorias == null or #lists.isEmpty(categorias)}">
+                <p>No hay categorías registradas todavía.</p>
+                <a class="btn" href="/categorias/nuevo">Crear primera categoría</a>
+            </div>
+
+            <table th:if="${categorias != null and !#lists.isEmpty(categorias)}">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -39,25 +45,34 @@
                 <tr th:each="c : ${categorias}">
                     <td th:text="${c.id}">1</td>
 
-                    <td th:text="${c.nombre}">Categoría</td>
+                    <td th:text="${c.nombre}">Fotografía</td>
 
-                    <td th:text="${c.descripcion}">Descripción</td>
+                    <td th:text="${c.descripcion}">Archivos de imagen</td>
 
                     <td>
-                        <div class="actions">
-                            <a class="btn gray"
-                               th:href="@{/categorias/editar/{id}(id=${c.id})}">
-                                Editar
-                            </a>
+                        <div class="file-menu">
 
-                            <form method="post"
-                                  th:action="@{/categorias/eliminar/{id}(id=${c.id})}">
-                                <button class="btn danger"
-                                        type="submit"
-                                        onclick="return confirm('¿Seguro que desea eliminar esta categoría?');">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <details>
+                                <summary>⋯</summary>
+
+                                <div class="file-dropdown">
+
+                                    <a th:href="@{/categorias/editar/{id}(id=${c.id})}">
+                                        Editar
+                                    </a>
+
+                                    <form method="post"
+                                          th:action="@{/categorias/eliminar/{id}(id=${c.id})}">
+                                        <button type="submit"
+                                                class="danger-option"
+                                                onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+                                            Eliminar
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </details>
+
                         </div>
                     </td>
                 </tr>

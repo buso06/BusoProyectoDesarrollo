@@ -13,15 +13,24 @@ import org.springframework.stereotype.Repository;
 import cr.ac.ucr.mediacloud.model.ArchivoMultimedia;
 import cr.ac.ucr.mediacloud.model.EstadoArchivo;
 
+/**
+ * Repository for multimedia file database operations.
+ */
 @Repository
 public class ArchivoRepository {
 
     private final JdbcTemplate jdbc;
 
+    /**
+     * Creates the file repository.
+     */
     public ArchivoRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    /**
+     * Maps a database row to an ArchivoMultimedia object.
+     */
     private final RowMapper<ArchivoMultimedia> mapper = (rs, n) -> {
         ArchivoMultimedia a = new ArchivoMultimedia();
 
@@ -49,6 +58,9 @@ public class ArchivoRepository {
         return a;
     };
 
+    /**
+     * Lists files that are not deleted.
+     */
     public List<ArchivoMultimedia> listar() {
         return jdbc.query(
                 "SELECT * FROM archivos_multimedia WHERE estado <> 'ELIMINADO' ORDER BY id DESC",
@@ -56,6 +68,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Filters files by status and category.
+     */
     public List<ArchivoMultimedia> filtrar(String estado, Integer categoriaId) {
         String sql = "SELECT * FROM archivos_multimedia WHERE 1=1";
         List<Object> args = new ArrayList<>();
@@ -75,6 +90,9 @@ public class ArchivoRepository {
         return jdbc.query(sql, mapper, args.toArray());
     }
 
+    /**
+     * Lists files from an album.
+     */
     public List<ArchivoMultimedia> listarPorAlbum(Integer albumId) {
         return jdbc.query(
                 "SELECT * FROM archivos_multimedia " +
@@ -85,6 +103,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Finds a file by id.
+     */
     public Optional<ArchivoMultimedia> buscar(Integer id) {
         return jdbc.query(
                 "SELECT * FROM archivos_multimedia WHERE id = ?",
@@ -93,6 +114,9 @@ public class ArchivoRepository {
         ).stream().findFirst();
     }
 
+    /**
+     * Saves a new file.
+     */
     public void guardar(ArchivoMultimedia a) {
         jdbc.update(
                 "INSERT INTO archivos_multimedia " +
@@ -110,6 +134,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Updates file album, category and status.
+     */
     public void actualizarDatos(Integer id, Integer albumId, Integer categoriaId, String estado) {
         jdbc.update(
                 "UPDATE archivos_multimedia SET album_id = ?, categoria_id = ?, estado = ? WHERE id = ?",
@@ -120,6 +147,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Moves a file to trash.
+     */
     public void papelera(Integer id) {
         jdbc.update(
                 "UPDATE archivos_multimedia SET estado = 'EN_PAPELERA', fecha_eliminacion = NOW() WHERE id = ?",
@@ -127,6 +157,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Deletes a file record.
+     */
     public void eliminar(Integer id) {
         jdbc.update(
                 "DELETE FROM archivos_multimedia WHERE id = ?",
@@ -134,6 +167,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Counts active files.
+     */
     public int total() {
         return jdbc.queryForObject(
                 "SELECT COUNT(*) FROM archivos_multimedia WHERE estado = 'ACTIVO'",
@@ -141,6 +177,9 @@ public class ArchivoRepository {
         );
     }
 
+    /**
+     * Generates the file count report by category.
+     */
     public List<Map<String, Object>> reporteCategoria() {
         return jdbc.queryForList(
                 "SELECT COALESCE(c.nombre, 'Sin categoria') categoria, COUNT(a.id) cantidad " +

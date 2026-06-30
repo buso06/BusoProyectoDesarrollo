@@ -16,23 +16,35 @@ import cr.ac.ucr.mediacloud.model.Usuario;
 import cr.ac.ucr.mediacloud.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for login, registration and logout.
+ */
 @Controller
 public class AuthController {
 
     private final UsuarioRepository usuarios;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Creates the authentication controller.
+     */
     public AuthController(UsuarioRepository usuarios,
                           BCryptPasswordEncoder passwordEncoder) {
         this.usuarios = usuarios;
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Shows the login page.
+     */
     @GetMapping({"/", "/login"})
     public String login() {
         return "auth/login";
     }
 
+    /**
+     * Starts the user session.
+     */
     @PostMapping("/login")
     public String iniciarSesion(@RequestParam String correo,
                                 @RequestParam String clave,
@@ -76,12 +88,18 @@ public class AuthController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Shows the registration page.
+     */
     @GetMapping("/registro")
     public String registro(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "auth/registro";
     }
 
+    /**
+     * Registers a new user.
+     */
     @PostMapping("/registro")
     public String registrarUsuario(@RequestParam String nombre,
                                    @RequestParam String correo,
@@ -120,12 +138,18 @@ public class AuthController {
         return "redirect:/login?registro=ok";
     }
 
+    /**
+     * Ends the user session.
+     */
     @PostMapping("/logout")
     public String cerrarSesion(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
     }
 
+    /**
+     * Encrypts text using SHA-256.
+     */
     private String sha256(String texto) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

@@ -15,6 +15,9 @@ import cr.ac.ucr.mediacloud.model.Usuario;
 import cr.ac.ucr.mediacloud.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for user management.
+ */
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -22,12 +25,18 @@ public class UsuarioController {
     private final UsuarioRepository usuarios;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Creates the user controller.
+     */
     public UsuarioController(UsuarioRepository usuarios,
                              BCryptPasswordEncoder passwordEncoder) {
         this.usuarios = usuarios;
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Shows the user list.
+     */
     @GetMapping
     public String listar(Model model, HttpSession session) {
         if (!esAdmin(session)) {
@@ -38,6 +47,9 @@ public class UsuarioController {
         return "usuarios/lista";
     }
 
+    /**
+     * Shows the form to create a user.
+     */
     @GetMapping("/nuevo")
     public String nuevo(Model model, HttpSession session) {
         if (!esAdmin(session)) {
@@ -55,6 +67,9 @@ public class UsuarioController {
         return "usuarios/form";
     }
 
+    /**
+     * Saves a new user.
+     */
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute("usuario") Usuario usuario,
                           @RequestParam String claveTexto,
@@ -96,6 +111,9 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    /**
+     * Shows the form to edit a user.
+     */
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Integer id,
                          Model model,
@@ -114,6 +132,9 @@ public class UsuarioController {
         return "usuarios/form";
     }
 
+    /**
+     * Updates an existing user.
+     */
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Integer id,
                              @ModelAttribute("usuario") Usuario usuario,
@@ -165,6 +186,9 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    /**
+     * Deactivates a user.
+     */
     @PostMapping("/desactivar/{id}")
     public String desactivar(@PathVariable Integer id,
                              HttpSession session) {
@@ -180,7 +204,7 @@ public class UsuarioController {
         }
 
         /*
-         * Evita que el administrador se desactive a sí mismo.
+         * Prevents the administrator from deactivating themselves.
          */
         if (usuarioSesion.getId() != null && usuarioSesion.getId().equals(id)) {
             return "redirect:/usuarios";
@@ -189,8 +213,7 @@ public class UsuarioController {
         Usuario usuarioADesactivar = usuarios.buscar(id).orElseThrow();
 
         /*
-         * Evita desactivar usuarios administradores.
-         * Así no te quedás sin admin por accidente.
+         * Prevents administrator users from being deactivated.
          */
         if (usuarioADesactivar.getRol() != null
                 && usuarioADesactivar.getRol() == Rol.ADMINISTRADOR) {
@@ -202,6 +225,9 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    /**
+     * Deletes a user.
+     */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id,
                            HttpSession session) {
@@ -217,7 +243,7 @@ public class UsuarioController {
         }
 
         /*
-         * También protegemos esta ruta por si algún botón usa /eliminar.
+         * Protects this route if a button uses /eliminar.
          */
         if (usuarioSesion.getId() != null && usuarioSesion.getId().equals(id)) {
             return "redirect:/usuarios";
@@ -235,6 +261,9 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
+    /**
+     * Checks if the session user is an active administrator.
+     */
     private boolean esAdmin(HttpSession session) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 

@@ -11,15 +11,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cr.ac.ucr.mediacloud.model.Album;
 
+/**
+ * Repository for album database operations.
+ */
 @Repository
 public class AlbumRepository {
 
     private final JdbcTemplate jdbc;
 
+    /**
+     * Creates the album repository.
+     */
     public AlbumRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
+    /**
+     * Maps a database row to an Album object.
+     */
     private final RowMapper<Album> mapper = (rs, n) -> {
         Album a = new Album();
 
@@ -39,6 +48,9 @@ public class AlbumRepository {
         return a;
     };
 
+    /**
+     * Lists all albums.
+     */
     public List<Album> listar() {
         return jdbc.query(
                 "SELECT * FROM albumes ORDER BY id DESC",
@@ -46,6 +58,9 @@ public class AlbumRepository {
         );
     }
 
+    /**
+     * Lists albums by user, or all albums for admins.
+     */
     public List<Album> listarPorUsuario(Integer usuarioId, boolean admin) {
         if (admin) {
             return listar();
@@ -58,6 +73,9 @@ public class AlbumRepository {
         );
     }
 
+    /**
+     * Finds an album by id.
+     */
     public Optional<Album> buscar(Integer id) {
         return jdbc.query(
                 "SELECT * FROM albumes WHERE id = ?",
@@ -66,6 +84,9 @@ public class AlbumRepository {
         ).stream().findFirst();
     }
 
+    /**
+     * Saves a new album.
+     */
     public void guardar(Album a) {
         jdbc.update(
                 "INSERT INTO albumes(usuario_id, nombre, descripcion, publico, clave, color) " +
@@ -79,6 +100,9 @@ public class AlbumRepository {
         );
     }
 
+    /**
+     * Updates an album.
+     */
     public void actualizar(Album a) {
         jdbc.update(
                 "UPDATE albumes SET nombre = ?, descripcion = ?, publico = ?, clave = ?, color = ? WHERE id = ?",
@@ -91,6 +115,9 @@ public class AlbumRepository {
         );
     }
 
+    /**
+     * Deletes an album and its related files.
+     */
     @Transactional
     public void eliminar(Integer id) {
         jdbc.update(
@@ -110,6 +137,9 @@ public class AlbumRepository {
         );
     }
 
+    /**
+     * Counts all albums.
+     */
     public int total() {
         return jdbc.queryForObject(
                 "SELECT COUNT(*) FROM albumes",

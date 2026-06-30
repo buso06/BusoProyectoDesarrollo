@@ -16,6 +16,9 @@ import cr.ac.ucr.mediacloud.repository.AlbumRepository;
 import cr.ac.ucr.mediacloud.repository.ArchivoRepository;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for album management.
+ */
 @Controller
 @RequestMapping("/albumes")
 public class AlbumController {
@@ -24,6 +27,9 @@ public class AlbumController {
     private final ArchivoRepository archivos;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Creates the album controller.
+     */
     public AlbumController(AlbumRepository albumes,
                            ArchivoRepository archivos,
                            BCryptPasswordEncoder passwordEncoder) {
@@ -32,12 +38,18 @@ public class AlbumController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Shows the album list.
+     */
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("albumes", albumes.listar());
         return "albumes/lista";
     }
 
+    /**
+     * Shows the form to create an album.
+     */
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         Album album = new Album();
@@ -50,6 +62,9 @@ public class AlbumController {
         return "albumes/form";
     }
 
+    /**
+     * Saves a new album.
+     */
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Album album,
                           @RequestParam(required = false) String claveTexto,
@@ -93,6 +108,9 @@ public class AlbumController {
         return "redirect:/albumes";
     }
 
+    /**
+     * Shows the form to edit an album.
+     */
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Integer id, Model model) {
         Album album = albumes.buscar(id).orElseThrow();
@@ -107,6 +125,9 @@ public class AlbumController {
         return "albumes/form";
     }
 
+    /**
+     * Updates an existing album.
+     */
     @PostMapping("/actualizar/{id}")
     public String actualizar(@PathVariable Integer id,
                              @ModelAttribute Album album,
@@ -151,6 +172,9 @@ public class AlbumController {
         return "redirect:/albumes";
     }
 
+    /**
+     * Shows an album and its files.
+     */
     @GetMapping("/ver/{id}")
     public String ver(@PathVariable Integer id,
                       Model model,
@@ -173,6 +197,9 @@ public class AlbumController {
         return "albumes/detalle";
     }
 
+    /**
+     * Validates the password of a private album.
+     */
     @PostMapping("/validar-clave/{id}")
     public String validarClave(@PathVariable Integer id,
                                @RequestParam String claveTexto,
@@ -202,12 +229,18 @@ public class AlbumController {
         return "redirect:/albumes/ver/" + id;
     }
 
+    /**
+     * Deletes an album.
+     */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id) {
         albumes.eliminar(id);
         return "redirect:/albumes";
     }
 
+    /**
+     * Creates the session key for private album access.
+     */
     private String sessionKey(Integer id) {
         return "album_autorizado_" + id;
     }
